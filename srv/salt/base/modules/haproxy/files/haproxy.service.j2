@@ -1,0 +1,12 @@
+[Unit]
+Description=HAProxy Load Balancer
+After=syslog.target network.target
+
+[Service]
+ExecStartPre={{ pillar['haproxy_install_dir']}}/haproxy/sbin/haproxy -f {{ pillar['haproxy_install_dir']}}/haproxy/conf/haproxy.cfg   -c -q
+ExecStart={{ pillar['haproxy_install_dir']}}/haproxy/sbin/haproxy -Ws -f {{ pillar['haproxy_install_dir']}}/haproxy/conf/haproxy.cfg  -p /var/run/haproxy.pid
+ExecReload=/bin/kill -USR2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
